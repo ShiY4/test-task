@@ -25,7 +25,6 @@ export default class Slider extends React.Component {
 
   renderItems = () => {
     const { cards } = this.state
-    console.log(cards)
     return(
       cards.map((card) => {
         return (
@@ -65,7 +64,6 @@ export default class Slider extends React.Component {
   nextSlide = (e) => {
     const { offset, cards, cardsToShow } = this.state
     e.preventDefault()
-    console.log(e.target)
     const maxOffset = -(180 * (cards.length - cardsToShow))
     this.setState({offset: Math.max(offset - (180 * cardsToShow), maxOffset)})
   }
@@ -73,7 +71,6 @@ export default class Slider extends React.Component {
   prevSlide = (e) => {
     const { cardsToShow, offset } = this.state
     e.preventDefault()
-    console.log(e.target)
     this.setState({offset: Math.min(offset + (180 * cardsToShow), 0)})
   }
 

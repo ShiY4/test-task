@@ -1,6 +1,6 @@
-import './Canvas.css';
 import React from 'react';
 import { saveAs } from 'file-saver';
+import './Canvas.css';
 
 export default class Canvas extends React.Component{
 
@@ -69,7 +69,7 @@ export default class Canvas extends React.Component{
   render() {
     const { imageSrc, rotation } = this.state
     return (
-      <div className="App" style={{ textAlign: 'center', padding: '20px' }}>
+      <div className="container" style={{ textAlign: 'center', padding: '20px' }}>
         <h1>Image Rotator</h1>
         <input type="file" onChange={this.handleImageChange} accept="image/png, image/jpeg" />
         {imageSrc && (
