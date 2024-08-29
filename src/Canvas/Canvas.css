@@ -1,0 +1,15 @@
+html{
+    box-sizing: border-box;
+  }
+  
+  *, *::after, *::before{
+    box-sizing: inherit;
+    margin: 0;
+  }
+  
+  .container{
+    margin-top: 150px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }

@@ -1,0 +1,83 @@
+html{
+  box-sizing: border-box;
+}
+
+*, *::after, *::before{
+  box-sizing: inherit;
+  margin: 0;
+}
+
+.container{
+  margin: 150px 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.selector{
+  margin-bottom: 25px;
+}
+
+.slider{
+  height: 280px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border: 2px solid rgb(255, 219, 164);
+}
+
+.window{
+  height: 100%;
+  overflow: hidden;
+}
+
+.all-cards-container{
+  display: flex;
+  flex-direction: row;
+
+  transition: translate;
+  transition-property: transform;
+  transition-duration: 0.3s;
+  transition-timing-function: ease-in-out;
+}
+
+.card{
+  display: flex;
+  margin: 0 5px;
+  flex-direction: column;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.card-content{
+  width: 170px;
+  
+}
+
+.card-content__last-email{
+  word-wrap: break-word;
+} 
+
+.card__img-cont{
+  display: flex;
+}
+
+.card__img{
+  height: 170px;
+  width: 170px;
+}
+
+.button{
+  background-color: none;
+  cursor: pointer;
+  height: 100%;
+  border: none;
+  color: black;
+  transition: 0.3s;
+}
+
+.button:hover{
+  color: white;
+  background-color: black;
+  transition: 0.3s;
+}
