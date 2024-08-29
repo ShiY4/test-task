@@ -1,6 +1,5 @@
 import React from 'react';
 import axios from 'axios';
-import { ProgressBar } from 'react-bootstrap';
 import './Uploader.css';
 
 export default class Uploader extends React.Component{
@@ -52,61 +51,54 @@ export default class Uploader extends React.Component{
     });
   }
 
-  downloadFiles2 = async () => {
+  downloadFiles = async () => {
     const { items } = this.state;
 
     this.setState({ downloading: true });
-
-    // Фильтруем файлы, которые имеют размер больше 0 кб
     const validItems = [];
     const progress = [];
 
     try {
-        // Проверяем размер каждого файла
-        await Promise.all(items.map(async (url) => {
-            const headResponse = await axios.head(url);
-            const contentLength = headResponse.headers['content-length'];
+      await Promise.all(items.map(async (url) => {
+        const headResponse = await axios.head(url);
+        const contentLength = headResponse.headers['content-length'];
 
-            if (contentLength && contentLength > 0) {
-                validItems.push(url);
-                // Заполняем прогресс для валидных файлов
-                progress.push(0);
-            }
-        }));
+        if (contentLength && contentLength > 0) {
+          validItems.push(url);
+          progress.push(0);
+        }
+      }));
 
-        // Устанавливаем состояние прогресса только для валидных файлов
-        this.setState({ progress });
-
-        // Загрузить только валидные файлы
-        const promises = validItems.map((url, index) => {
-            return axios.get(url, {
-                responseType: 'blob',
-                onDownloadProgress: (progressEvent) => {
-                    const percentCompleted = Math.round((progressEvent.loaded * 100) / progressEvent.total);
-                    this.setState(state => {
-                        const newProgress = [...state.progress];
-                        newProgress[index] = percentCompleted;
-                        return { progress: newProgress };
-                    });
-                },
-            }).then(response => {
-                const blob = new Blob([response.data]);
-                const downloadUrl = window.URL.createObjectURL(blob);
-                const link = document.createElement('a');
-                link.href = downloadUrl;
-                link.setAttribute('download', `file-${index + 1}.txt`);
-                document.body.appendChild(link);
-                link.click();
-                link.parentNode.removeChild(link);
-                window.URL.revokeObjectURL(downloadUrl);
+      const promises = validItems.map((url, index) => {
+        return axios.get(url, {
+          responseType: 'blob',
+          onDownloadProgress: (progressEvent) => {
+            const percentCompleted = Math.round((progressEvent.loaded * 100) / progressEvent.total);
+            this.setState(state => {
+              const newProgress = [...state.progress];
+              newProgress[index] = percentCompleted;
+              return { progress: newProgress };
             });
+          },
+        }).then(response => {
+          const blob = new Blob([response.data]);
+          const downloadUrl = window.URL.createObjectURL(blob);
+          const link = document.createElement('a');
+          link.href = downloadUrl;
+          link.setAttribute('download', `file-${index + 1}.txt`);
+          document.body.appendChild(link);
+          link.click();
+          link.parentNode.removeChild(link);
+          window.URL.revokeObjectURL(downloadUrl);
         });
+      });
 
-        await Promise.all(promises);
+      await Promise.all(promises);
+
     } catch (error) {
-        console.error('Ошибка при скачивании файлов:', error);
+      console.error('Ошибка при скачивании файлов:', error);
     } finally {
-        this.setState({ downloading: false });
+      this.setState({ downloading: false });
     }
   }
 
@@ -114,7 +106,7 @@ export default class Uploader extends React.Component{
     return (
       <div className='container'>
         <h1>Загрузчик файлов</h1>
-            <button onClick={this.downloadFiles2} disabled={this.state.downloading}>
+            <button onClick={this.downloadFiles} disabled={this.state.downloading}>
                 {this.state.downloading ? 'Скачивание...' : 'Скачать все'}
             </button>
             {this.state.progress.map((percent, index) => (
