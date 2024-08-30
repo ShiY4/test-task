@@ -14,19 +14,19 @@ export default class Uploader extends React.Component{
     }
   }
 
-  componentDidMount = async() => {
-    this.getLinks('https://store.neuro-city.ru/downloads/for-test-tasks')
+  componentDidMount = async () => {
+    await this.setStateWithLinks('https://store.neuro-city.ru/downloads/for-test-tasks');
   }
 
-  getLinks =  (url) => {
+  getLinks = async (url) => {
     const currentUrl = url;
 
-    axios.get(url, { responseType: 'json' })
-    .then((response) => {
+    try {
+      const response = await axios.get(url, { responseType: 'json' });
       let fileLinks = [];
       let promises = [];
 
-      response.data.forEach((element) => {
+      for (const element of response.data) {
         const name = element.name;
         const newUrl = `${currentUrl}/${name}`;
 
@@ -37,17 +37,25 @@ export default class Uploader extends React.Component{
           console.log('F', element.name, element.size);
           fileLinks.push(newUrl);
         }
+      }
+
+      const nestedLinks = await Promise.all(promises);
+      nestedLinks.forEach(links => {
+        fileLinks = fileLinks.concat(links);
       });
-      return Promise.all(promises).then(() => fileLinks);
-    })
-    .then((files) => {
-      const allItems = [...this.state.items, ...files];
-      this.setState({ items: allItems }, () => {
-        console.log(this.state.items.length);
-      });
-    })
-    .catch(error => {
+
+      return fileLinks;
+    } catch (error) {
       console.error('Ошибка получения ссылок:', error);
+      return [];
+    }
+  }
+
+  setStateWithLinks = async (initialUrl) => {
+    const links = await this.getLinks(initialUrl);
+    const allItems = [...this.state.items, ...links];
+    this.setState({ items: allItems }, () => {
+      console.log(this.state.items.length);
     });
   }
 
