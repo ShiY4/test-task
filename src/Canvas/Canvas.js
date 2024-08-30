@@ -41,19 +41,18 @@ export default class Canvas extends React.Component{
         case 270:
           canvas.width = img.height;
           canvas.height = img.width;
-          ctx.translate(canvas.width / 2, canvas.height / 2); // Поворачиваем вокруг центра
+          ctx.translate(canvas.width / 2, canvas.height / 2);
           ctx.rotate((rotation * Math.PI) / 180);
-          ctx.drawImage(img, -img.width / 2, -img.height / 2); // Рисуем с учетом центра
+          ctx.drawImage(img, -img.width / 2, -img.height / 2);
           break;
         case 180:
           canvas.width = img.width;
           canvas.height = img.height;
           if (rotation === 180) {
-            // Для 180 градусов, переворачиваем
             ctx.rotate((180 * Math.PI) / 180);
-            ctx.drawImage(img, -img.width, -img.height); // Рисуем в левом верхнем углу
+            ctx.drawImage(img, -img.width, -img.height);
           } else {
-            ctx.drawImage(img, 0, 0); // Рисуем обычным образом
+            ctx.drawImage(img, 0, 0);
           }
           break;
         default:
